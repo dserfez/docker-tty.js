@@ -9,12 +9,12 @@ RUN apk add --update nodejs python make g++ openssh-client && \
   rm -Rf /tmp/* /var/lib/cache/apk/*
 
 #ADD user.js /opt/node_modules/tty.js/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/node_modules/options/lib/user.js
-ADD user.js /home/core/.tty.js/static/user.js
+ADD user.js /opt/node_modules/tty.js/static/
 ADD run.sh /opt/run.sh
 
 WORKDIR /home/core
 
-USER core
+#USER core
 
 VOLUME /home/core/.ssh
 
