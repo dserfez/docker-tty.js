@@ -24,7 +24,7 @@ Mounted in ~/home/core/config.json
 
 ```json
 {
-  "shell": "ssh"
+  "shell": "ssh",
   "shellArgs": ["core@172.17.42.1"]
 }
 
