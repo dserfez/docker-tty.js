@@ -1,6 +1,8 @@
 #!/bin/sh
 
 : ${CONFIG_FILE:=$HOME/config.json}
+: ${TLS_KEY_FILE:=./server.key}
+: ${TLS_CERT_FILE:=./server.crt}
 
 if [ ! -r ${CONFIG_FILE} ]
 then
@@ -9,7 +11,8 @@ then
   : ${SSH_USER:=core}
   ssh-keyscan -t rsa ${SSH_HOST} > .ssh/known_hosts
   #echo -e "{\n  \"shell\": \"ssh\",\n  \"shellArgs\": [ \"-i\", \"/home/core/.ssh/id_rsa\", \"${SSH_USER}@${SSH_HOST}\"]\n}" > ${CONFIG_FILE}
-  echo -e "{\n  \"shell\": \"ssh\",\n  \"shellArgs\": [\"${SSH_USER}@${SSH_HOST}\"]\n}" > ${CONFIG_FILE}
+  echo -e "{\n  \"shell\": \"ssh\",\n  \"shellArgs\": [\"${SSH_USER}@${SSH_HOST}\"],\n" > ${CONFIG_FILE}
+  echo -e "\"https\": {\n    \"key\": \"${TLS_KEY_FILE}\",\n    \"cert\": \"${TLS_KEY_FILE}\"\n  },\n}\" >> ${CONFIG_FILE}
 fi
 
 #su - core -c "ssh -i \$HOME/.ssh/id_rsa core@172.17.0.1"
