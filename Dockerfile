@@ -1,4 +1,4 @@
-FROM alpine:3.2
+FROM alpine:3.3
 MAINTAINER dserfez@gmail.com
 RUN apk add --update nodejs python make g++ openssh-client && \
   mkdir -p /opt/ && cd /opt/ && \
@@ -14,7 +14,7 @@ ADD run.sh /opt/run.sh
 
 WORKDIR /home/core
 
-#USER core
+USER core
 
 VOLUME /home/core/.ssh
 

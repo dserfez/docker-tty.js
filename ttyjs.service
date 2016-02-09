@@ -1,0 +1,8 @@
+[Unit]
+description=ttyjs service
+
+[Service]
+ExecStart=/bin/sh -c '/opt/bin/start_script.sh'
+
+[Install]
+WantedBy=multi-user.target

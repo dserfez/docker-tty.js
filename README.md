@@ -14,7 +14,7 @@ The connection (typed usernames, passwords and commands) from the browser to tty
 
 ## Configuration
 
-By default starting a terminal will start 
+By default starting a terminal will start
 * Host: 172.17.0.1
 * User: core
 * config file: ~/config.json
@@ -46,7 +46,7 @@ Created in /home/core/config.json
 
 ```
 docker run --rm --name ttyjs -h ttyjs \
-  -v ${KEY_FILE}:/home/core/.ssh/id_rsa \
-  -e HOME=/home/core \
+  -v /home/core/.ssh:/home/core/.ssh \
+  -u core \
   cycomf/ttyjs
 ```
