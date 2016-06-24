@@ -1,10 +1,8 @@
 FROM alpine:3.3
 MAINTAINER dserfez@gmail.com
-RUN apk add --update nodejs python make g++ openssh-client && \
+RUN apk add --update nodejs python make g++ openssh-client sudo && \
   mkdir -p /opt/ && cd /opt/ && \
   npm install tty.js && \
-  adduser -u 500 -D -s /bin/sh -h /home/core core && \
-  chown -R core:core /home/core && \
   apk del python make g++ gcc && \
   rm -Rf /tmp/* /var/lib/cache/apk/*
 
@@ -12,11 +10,11 @@ RUN apk add --update nodejs python make g++ openssh-client && \
 ADD user.js /opt/node_modules/tty.js/static/
 ADD run.sh /opt/run.sh
 
-WORKDIR /home/core
+#WORKDIR /home/core
 
-USER core
+#USER core
 
-VOLUME /home/core/.ssh
+#VOLUME /home/core/.ssh
 
 EXPOSE 8080
 
