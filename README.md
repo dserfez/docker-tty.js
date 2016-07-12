@@ -15,18 +15,21 @@ The connection (typed usernames, passwords and commands) from the browser to tty
 ## Configuration
 
 By default starting a terminal will start
-* Host: 172.17.0.1
-* User: core
+* Host: IPv4 of docker0 interface 
+* User: username of the user staring the start_script.sh
 * config file: ~/config.json
 
 ### Environment variables
-* `SSH_HOST` (defaults to IP of interface _docker0_ or by envirnomnet variable `DOCKER_IFACE` )
-* `SSH_USER`
-* `CONFIG_FILE`
+* `SSH_HOST` - address of the ssh server (defaults to IP of interface _docker0_ or by envirnomnet variable `DOCKER_IFACE` )
+* `SSH_USER` - user which will connect to the ssh server 
+* `CONFIG_FILE` - tty.js config file (https://github.com/chjj/tty.js/#configuration)
+* `DOCKER_IFACE`
 
 ### Config file
 
 Created in /home/core/config.json
+
+More info: https://github.com/chjj/tty.js/#configuration
 
 **Default:**
 
@@ -43,6 +46,8 @@ Created in /home/core/config.json
 ```
 
 ## Run
+
+curl -L https://goo.gl/MIFSwr | sh
 
 ```
 docker run --rm --name ttyjs -h ttyjs \
