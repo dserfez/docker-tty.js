@@ -1,19 +1,33 @@
 #!/bin/bash
+# start_script.sh
+#   Used to start the cycomf/tty.js container
+#   More information here: https://github.com/dserfez/docker-tty.js
+# author: dserfez@gmail.com
+# license:
 
-### BEGIN CONFIG CESTION
+
+### BEGIN CONFIG SECTION
 
 DOCKER_OPTS="-ti"
 #DOCKER_OPTS="-i"
 
+SSH_USER=$(id -nu)
+USER_HOME=$HOME
+
 : ${ADMIN_PASS:=admin}
-: ${SSH_HOST:=172.17.42.1}
+#: ${SSH_HOST:=172.17.42.1}
 : ${SSH_USER:=core}
 
-: ${USER_HOME:=/home/core}
+: ${USER_HOME:=/home/${SSH_USER}}
+: ${DOCKER_IFACE:=docker0}
 
-### end CONFIG CESTION
+### end CONFIG SECTION
 
 KEY_FILE="${USER_HOME}/.ssh/id_rsa"
+
+set_ssh_host() {
+  export SSH_HOST=$(ip -o -f inet address show dev ${DOCKER_IFACE} | awk '{print $4}' | cut -d"/" -f1)
+}
 
 user_details() {
   export SSH_USER_ID=$(id -u ${SSH_USER})
@@ -33,12 +47,17 @@ genkeys() {
 
 user_details
 
+if [[ -z ${SSH_HOST+x} ]]; then set_ssh_host ; fi
+
 [ -r "${KEY_FILE}" ] || genkeys
 
 [ $(grep tty.js-host ${USER_HOME}/.ssh/authorized_keys) ] || write_ak_file
 
 #docker run -ti -p 8080:8080 -h tty --rm --name tty -v ${KEY_FILE}:/home/core/.ssh/id_rsa -e HOME=/home/core ttyjs #/bin/sh
 #docker run --rm --name ttyjs -h ttyjs -v ${KEY_FILE}:/home/core/.ssh/id_rsa -e HOME=/home/core cycomf/ttyjs
+
+docker pull cycomf/ttyjs
+
 docker run $DOCKER_OPTS --rm --name ttyjs -h ttyjs \
   -v ${USER_HOME}/.ssh:${USER_HOME}/.ssh \
   -e SSH_HOST=${SSH_HOST} \
@@ -52,4 +71,3 @@ docker run $DOCKER_OPTS --rm --name ttyjs -h ttyjs \
   cycomf/ttyjs
 
 [ ${ADDED_TO_AH} == "true" ] && sed -i 's|^.*tty.js-host$||' ${USER_HOME}/.ssh/authorized_keys
-
