@@ -20,9 +20,9 @@ By default starting a terminal will start
 * config file: ~/config.json
 
 ### Environment variables
-* SSH_HOST
-* SSH_USER
-* CONFIG_FILE
+* `SSH_HOST` (defaults to IP of interface _docker0_ or by envirnomnet variable `DOCKER_IFACE` )
+* `SSH_USER`
+* `CONFIG_FILE`
 
 ### Config file
 
