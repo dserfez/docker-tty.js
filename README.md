@@ -47,7 +47,7 @@ More info: https://github.com/chjj/tty.js/#configuration
 
 ## Run
 
-curl -L https://goo.gl/MIFSwr | sh
+curl -L https://goo.gl/LbBHi2 | sh
 
 ```
 docker run --rm --name ttyjs -h ttyjs \
