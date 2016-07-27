@@ -1,8 +1,8 @@
 #!/bin/sh
 
 : ${CONFIG_FILE:=$USER_HOME/config.json}
-: ${TLS_KEY_FILE:=./server.key}
-: ${TLS_CERT_FILE:=./server.crt}
+: ${TLS_KEY_FILE:=./ttyjs.key}
+: ${TLS_CERT_FILE:=./ttyjs.crt}
 
 configure_user() {
   if [[ $(id ${SSH_USER} 2>/dev/null | grep -c ${SSH_USER})=="0" ]]; then
@@ -26,7 +26,10 @@ then
 
   echo -e "{\n  \"shell\": \"ssh\",\n  \"shellArgs\": [\"-o\", \"StrictHostKeyChecking=no\", \"-i\", \"${USER_HOME}/.ssh/id_rsa\", \"${SSH_USER}@${SSH_HOST}\"]," > ${CONFIG_FILE}
   echo -e "\n  \"users\": {\n    \"admin\": \"${ADMIN_PASS}\"\n  }" >> ${CONFIG_FILE}
-  [ -r ${TLS_KEY_FILE} ] && echo -e ",\n\"https\": {\n    \"key\": \"${TLS_KEY_FILE}\",\n    \"cert\": \"${TLS_KEY_FILE}\"\n  }" >> ${CONFIG_FILE}
+  if [[ -r ${TLS_KEY_FILE} ]] ; then
+    req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ttyjs.key -out ttyjs.crt -subj "/C=$(echo $LANG | cut -d"_" -f2 | cut -d "." -f1)/O=$(dnsdomainname || echo Private)/CN=$(hostname)"
+  fi
+  echo -e ",\n\"https\": {\n    \"key\": \"${TLS_KEY_FILE}\",\n    \"cert\": \"${TLS_KEY_FILE}\"\n  }" >> ${CONFIG_FILE}
   echo -e "\n}" >> ${CONFIG_FILE}
 fi
 

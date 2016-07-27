@@ -58,7 +58,8 @@ if [[ -z ${SSH_HOST+x} ]]; then set_ssh_host ; fi
 
 docker pull cycomf/ttyjs
 
-docker run $DOCKER_OPTS --rm --name ttyjs -h ttyjs \
+docker run $DOCKER_OPTS --rm --name ttyjs -h $(hostname -f) \
+  -p 9876:9876 \
   -v ${USER_HOME}/.ssh:${USER_HOME}/.ssh \
   -e SSH_HOST=${SSH_HOST} \
   -e SSH_USER=${SSH_USER} \

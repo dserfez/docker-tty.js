@@ -1,6 +1,6 @@
 FROM alpine:3.3
 MAINTAINER dserfez@gmail.com
-RUN apk add --update nodejs python make g++ openssh-client sudo && \
+RUN apk add --update nodejs python make g++ openssh-client sudo openssl && \
   mkdir -p /opt/ && cd /opt/ && \
   npm install tty.js && \
   apk del python make g++ gcc && \
