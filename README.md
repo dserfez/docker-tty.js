@@ -55,3 +55,37 @@ docker run --rm --name ttyjs -h ttyjs \
   -u core \
   cycomf/ttyjs
 ```
+
+## Behind reverse proxy
+Simplest INSECURE nginx reverse proxy configuration with URI `/shell/` to access ttyjs:
+
+```
+daemon off;
+
+http {
+  server {
+  listen 80;
+    location /shell/ {
+        proxy_pass http://TTYJS_CONTAINER_IP:8080/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 43200000;
+
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+    }
+  }
+}
+
+events {  }
+
+```
+
+To run the reverse proxy with official nginx Docker image:
+
+```
+docker run -ti --rm --name nginx -p 80:80 -v /path/to/above/config/file.conf:/etc/nginx/nginx.conf:ro nginx nginx -c /etc/nginx/nginx.conf
+```
