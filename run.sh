@@ -38,5 +38,6 @@ fi
 echo "The ttyjs container is not listening on any external ports by default."
 echo "In order to make it accessible, you can do: "
 echo "sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to $(ip -o -f inet a | grep eth0 | awk '{print $4}' | cut -d"/" -f1)"
-
+echo -e "\n\n\nMY IP IS: $(ip -o -f inet a s dev eth0 | awk '{print $4}' | cut -d"/" -f1
+172.17.0.4)"
 /opt/node_modules/tty.js/bin/tty.js --config ${CONFIG_FILE}
