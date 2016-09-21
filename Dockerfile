@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:3.4
 MAINTAINER dserfez@gmail.com
 RUN apk add --update nodejs python make g++ openssh-client sudo openssl && \
   mkdir -p /opt/ && cd /opt/ && \
