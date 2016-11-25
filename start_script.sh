@@ -47,16 +47,16 @@ genkeys() {
 
 user_details
 
-if [[ -z ${SSH_HOST+x} ]]; then set_ssh_host ; fi
+if [[ -z ${SSH_HOST} ]]; then set_ssh_host ; fi
 
-[ -r "${KEY_FILE}" ] || genkeys
+[[ -r "${KEY_FILE}" ]] || genkeys
 
-[ $(grep tty.js-host ${USER_HOME}/.ssh/authorized_keys) ] || write_ak_file
+[[ $(grep tty.js-host ${USER_HOME}/.ssh/authorized_keys) ]] || write_ak_file
 
 #docker run -ti -p 8080:8080 -h tty --rm --name tty -v ${KEY_FILE}:/home/core/.ssh/id_rsa -e HOME=/home/core ttyjs #/bin/sh
 #docker run --rm --name ttyjs -h ttyjs -v ${KEY_FILE}:/home/core/.ssh/id_rsa -e HOME=/home/core cycomf/ttyjs
 
-docker pull cycomf/ttyjs
+#docker pull cycomf/ttyjs
 
 docker run $DOCKER_OPTS --rm --name ttyjs -h $(hostname -f) \
   -p 9876:9876 \
@@ -71,4 +71,5 @@ docker run $DOCKER_OPTS --rm --name ttyjs -h $(hostname -f) \
   -e ADMIN_PASS=${ADMIN_PASS} \
   cycomf/ttyjs
 
-[ ${ADDED_TO_AH} == "true" ] && sed -i 's|^.*tty.js-host$||' ${USER_HOME}/.ssh/authorized_keys
+[[ ${ADDED_TO_AH} == "true" ]] && sed -i '/^.*tty.js-host$/d' ${USER_HOME}/.ssh/authorized_keys
+
