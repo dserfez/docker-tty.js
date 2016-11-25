@@ -14,7 +14,7 @@ configure_user() {
 
 if [[ -z ${SSH_USER+x} ]]; then configure_user ; fi
 
-if [ ! -r ${CONFIG_FILE} ]
+if [[ ! -r ${CONFIG_FILE} ]]
 then
   ### get address of ssh server
   #: ${SSH_HOST:=172.17.42.1}
@@ -26,13 +26,15 @@ then
 
   echo -e "{\n  \"shell\": \"ssh\",\n  \"shellArgs\": [\"-o\", \"StrictHostKeyChecking=no\", \"-i\", \"${USER_HOME}/.ssh/id_rsa\", \"${SSH_USER}@${SSH_HOST}\"]," > ${CONFIG_FILE}
   echo -e "\n  \"users\": {\n    \"admin\": \"${ADMIN_PASS}\"\n  }" >> ${CONFIG_FILE}
-  if [[ -r ${TLS_KEY_FILE} ]] ; then
-    req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ttyjs.key -out ttyjs.crt -subj "/C=$(echo $LANG | cut -d"_" -f2 | cut -d "." -f1)/O=$(dnsdomainname || echo Private)/CN=$(hostname)"
-  fi
   echo -e ",\n\"https\": {\n    \"key\": \"${TLS_KEY_FILE}\",\n    \"cert\": \"${TLS_KEY_FILE}\"\n  }" >> ${CONFIG_FILE}
   echo -e "\n}" >> ${CONFIG_FILE}
 fi
 
+if [[ -r ${TLS_KEY_FILE} ]] ; then
+  req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ttyjs.key -out ttyjs.crt -subj "/C=$(echo $LANG | cut -d"_" -f2 | cut -d "." -f1)/O=$(dnsdomainname || echo Private)/CN=$(hostname)"
+  
+fi
+  
 #su - core -c "ssh -i \$HOME/.ssh/id_rsa core@172.17.0.1"
 #su - core -c "/opt/node_modules/tty.js/bin/tty.js --config ${CONFIG_FILE}"
 #sudo -u ${SSH_USER} /opt/node_modules/tty.js/bin/tty.js --config ${CONFIG_FILE}
